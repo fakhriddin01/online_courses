@@ -17,6 +17,16 @@ const start = async () => {
         SwaggerModule.setup('/api/docs', app, document);
         app.setGlobalPrefix('api');
         app.useGlobalPipes(new ValidationPipe());
+        app.use((req, res, next)=>{
+            const startTime = Date.now();
+            const start = new Date(startTime)
+            res.on('finish', ()=>{
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                console.log(`${req.method}; ${req.originalUrl}; ${res.statusCode}; ${responseTime}ms; at:${start.toString()}`);
+            });
+            next();
+        })
         app.listen(PORT, ()=> {
         console.log(`Server is running on ${PORT}`);
         

@@ -1,11 +1,11 @@
-FROM --platform=linux/amd64 node:alpine AS builder
+FROM --platform=linux/amd64 node:18.12.1 AS builder
 WORKDIR /app
 COPY /*.json ./
 COPY . .
 RUN npm run build
 
-FROM --platform=linux/amd64 node:alpine
+FROM --platform=linux/amd64 node:18.12.1
 WORKDIR /app
 COPY --from=builder /app ./
 EXPOSE 3001
-RUN ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod"]

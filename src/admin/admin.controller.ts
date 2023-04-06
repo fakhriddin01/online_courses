@@ -9,6 +9,7 @@ import { SelfGuard } from '../guards/self.guard';
 import {ApiOperation, ApiTags} from '@nestjs/swagger'
 import { IsCreatorGuard } from '../guards/isCreator.guard';
 import { ActivateUserDto } from './dto/activate-admin.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 
 @ApiTags('Admin lar bo`limi')
@@ -73,6 +74,14 @@ export class AdminController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminService.update(+id, updateAdminDto);
+  }
+
+  @ApiOperation({summary: 'Adminni parolini o`zgartirish'})
+  @UseGuards(SelfGuard)
+  @UseGuards(IsAdminGuard)
+  @Patch(':id/update-password')
+  updatePassword(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
+    return this.adminService.updatePassword(+id, updatePasswordDto);
   }
 
   @ApiOperation({summary: 'Adminni o`chirish'})

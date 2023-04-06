@@ -8,6 +8,7 @@ import * as bcrypt from 'bcryptjs';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { LogoutAdminDto } from './dto/logout-admin.dto';
 import { ActivateUserDto } from './dto/activate-admin.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 
 @Injectable()
@@ -131,6 +132,27 @@ export class AdminService {
     const updatedAdmin = await this.adminRepo.update({is_active: false}, {where: {id: deactivateUserDto.admin_id}, returning: true});
     
     return updatedAdmin;
+  }
+
+  async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto){
+    const {old_password, new_password, confirm_password} = updatePasswordDto;
+    const admin = await this.findOne(id);
+    
+    const isMatch = await bcrypt.compare(old_password, admin.hashed_password);
+    if(!isMatch){
+      throw new UnauthorizedException('password not correct')
+    }
+
+    if(new_password !== confirm_password){
+      throw new BadRequestException('confirm password not match')
+    }
+
+    const hashed_password = await bcrypt.hash(new_password, 7);
+    const updatedAdmin = await this.adminRepo.update({hashed_password}, {where:{id}, returning: true})
+    return {
+      message: "password updated",
+      updatedAdmin
+    }
   }
   
 

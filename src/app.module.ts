@@ -28,7 +28,7 @@ import { AdminModule } from './admin/admin.module';
         ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true}),
         SequelizeModule.forRoot({
             dialect: 'postgres',
-            host: "127.0.0.1",
+            host: process.env.POSTGRES_HOST,
             port: Number(process.env.POSTGRES_PORT),
             username: process.env.POSTGRES_USER,
             password: String(process.env.POSTGRES_PASSWORD),

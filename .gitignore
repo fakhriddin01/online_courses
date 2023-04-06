@@ -35,3 +35,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 .env
 .env_copy
+pgdata
+.dockerignore
+docker-compose.yml
+Dockerfile
