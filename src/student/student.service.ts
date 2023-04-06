@@ -11,7 +11,7 @@ import { AddMinutesToDate } from '../helper/addMinutes';
 import { dates, decode, encode } from '../helper/crypto';
 import { ValidateOtp } from './dto/validate-otp.dto';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { RefreshTokenDto } from './dto/refreshToken.dto';
 
 @Injectable()
@@ -234,7 +234,7 @@ export class StudentService {
 
 
   private async generateToken(client: Student){
-    const jwtPayload = { id: client.id, otp_id: client.otp_id};
+    const jwtPayload = { id: client.id, otp_id: client.otp_id, is_admin: false};
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
         secret: process.env.ACCESS_TOKEN_KEY,

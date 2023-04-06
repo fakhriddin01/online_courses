@@ -13,7 +13,7 @@ export class CategoryService {
     return this.categoryRepo.create(createCategoryDto);
   }
 
- findAll() {
+  findAll() {
     return this.categoryRepo.findAll({include: {all:true}});
   }
   

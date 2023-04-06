@@ -5,10 +5,13 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Course } from './models/course.model';
 import { Category } from '../category/models/category.model';
 import { Teacher } from '../teacher/models/teacher.model';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
 
-  imports: [SequelizeModule.forFeature([Course, Category, Teacher])],
+  imports: [SequelizeModule.forFeature([Course, Category, Teacher]),
+  JwtModule.register({})
+],
   controllers: [CourseController],
   providers: [CourseService]
 })

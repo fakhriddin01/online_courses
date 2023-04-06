@@ -14,21 +14,28 @@ import { OtpModule } from './otp/otp.module';
 import { TokenModule } from './token/token.module';
 import { StatusModule } from './status/status.module';
 import { StudentCourseModule } from './student_course/student_course.module';
+import { Otp } from './otp/models/otp.model';
+import { Status } from './status/models/status.model';
+import { Student } from './student/models/student.model';
+import { StudentCourse } from './student_course/models/student_course.model';
+import { Token } from './token/models/token.model';
+import { CourseMedia } from './course_media/models/course_media.model';
+import { Course } from './course/models/course.model';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true}),
-        
         SequelizeModule.forRoot({
             dialect: 'postgres',
-            host: process.env.POSTGRES_HOST,
+            host: "127.0.0.1",
             port: Number(process.env.POSTGRES_PORT),
             username: process.env.POSTGRES_USER,
             password: String(process.env.POSTGRES_PASSWORD),
             database: process.env.POSTGRES_DB,
-            models: [__dirname + 'dist/**/*.model{.ts,.js}'],
+            models: [Category, Course, CourseMedia, Otp, Status, Student, StudentCourse, Teacher, Token],
             autoLoadModels: true,
-            logging: true
+            logging: false
         }),
         CategoryModule,
         TeacherModule,
@@ -39,7 +46,8 @@ import { StudentCourseModule } from './student_course/student_course.module';
         OtpModule,
         TokenModule,
         StatusModule,
-        StudentCourseModule],
+        StudentCourseModule,
+        AdminModule],
     controllers: [],
     providers: [],
     exports: []

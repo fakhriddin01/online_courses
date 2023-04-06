@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
@@ -7,6 +7,9 @@ import { AddDeviceInfo } from '../decorators/addDeviceToReq';
 import { ValidateOtp } from './dto/validate-otp.dto';
 import { RefreshTokenDto } from './dto/refreshToken.dto';
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { SelfGuard } from "../guards/self.guard";
+import { JwtGuard } from "../guards/jwt-auth.guard";
+import { IsAdminGuard } from "../guards/isAdmin.guard";
 
 @ApiTags('Studentlar bo`limi')
 @Controller('student')
@@ -38,30 +41,36 @@ export class StudentController {
   }
 
   @ApiOperation({summary: 'OTP tekshirish va yangi foydalanuvchini ro`yhatdan o`tkazish'})
+  @UseGuards(IsAdminGuard)
   @Get()
   findAll() {
     return this.studentService.findAll();
   }
 
   @ApiOperation({summary: 'barchar tokenlarni olish'})
+  @UseGuards(IsAdminGuard)
   @Get('tokens')
   findAlltoken() {
     return this.studentService.findAlltoken();
   }
 
   @ApiOperation({summary: 'Bitta foynalanuvchini olish'})
+  @UseGuards(SelfGuard)
+  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.studentService.findOne(+id);
   }
 
   @ApiOperation({summary: 'Bitta foynalanuvchini o`zgartirish'})
+  @UseGuards(IsAdminGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
     return this.studentService.update(+id, updateStudentDto);
   }
 
   @ApiOperation({summary: 'Bitta foynalanuvchini o`chirish'})
+  @UseGuards(IsAdminGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.studentService.remove(+id);

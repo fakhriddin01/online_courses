@@ -3,9 +3,10 @@ import { StatusService } from './status.service';
 import { StatusController } from './status.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Status } from './models/status.model';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Status])],
+  imports: [SequelizeModule.forFeature([Status]), JwtModule.register({})],
   controllers: [StatusController],
   providers: [StatusService]
 })
